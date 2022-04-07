@@ -2,6 +2,7 @@
 #include <string>
 #include <windows.h>
 #include <locale>
+#include <cmath>
 
 #include "BracketsBalance.h"
 
@@ -16,7 +17,7 @@ void inputString(string& inputedString);
 
 void balanceCheckerHub(string inputedString);
 
-BracketsBalance checkBrcaketsBalanse(string str, size_t ind, BracketsBalance balance);
+BracketsBalance checkBrcaketsBalance(string str, BracketsBalance balance, size_t ind = 0);
 
 
 
@@ -113,7 +114,7 @@ void inputString(string& inputedString)
 void balanceCheckerHub(string inputedString)
 {
 	BracketsBalance balance;
-	balance = checkBrcaketsBalanse(inputedString, 0, balance);
+	balance = checkBrcaketsBalance(inputedString, balance);
 
 	if (balance.roundBalance == 0)
 	{
@@ -121,7 +122,7 @@ void balanceCheckerHub(string inputedString)
 	}
 	else
 	{
-		cout << "¬ строке не хватает " << balance.roundBalance <<
+		cout << "¬ строке не хватает " << abs(balance.roundBalance) <<
 			(balance.roundBalance < 0 ? " открывающих " : " закрывающих ") <<
 			"круглых скобок\n";
 	}
@@ -132,7 +133,7 @@ void balanceCheckerHub(string inputedString)
 	}
 	else 
 	{
-		cout << "¬ строке не хватает " << balance.squareBalance <<
+		cout << "¬ строке не хватает " << abs(balance.squareBalance) <<
 			(balance.squareBalance < 0 ? " открывающих " : " закрывающих ") <<
 			"квадратных скобок\n";
 	}
@@ -143,36 +144,39 @@ void balanceCheckerHub(string inputedString)
 	}
 	else
 	{
-		cout << "¬ строке не хватает " << balance.bracesBalance <<
+		cout << "¬ строке не хватает " << abs(balance.bracesBalance) <<
 			(balance.bracesBalance < 0 ? " открывающих " : " закрывающих ") <<
 			"фигурных скобок\n";
 	}
 }
 
 
-BracketsBalance checkBrcaketsBalanse(string str, size_t ind,  BracketsBalance balance)
+BracketsBalance checkBrcaketsBalance(string str, BracketsBalance balance, size_t ind)
 {
 	while (ind < str.size())
+	{
 		switch (str[ind])
 		{
-		case '(': 
+		case '(':
 			balance.roundBalance++;
-			return checkBrcaketsBalanse(str, ind + 1, balance);
+			break;
 		case ')':
 			balance.roundBalance--;
-			return checkBrcaketsBalanse(str, ind + 1, balance);
-		case '[': 
+			break;
+		case '[':
 			balance.squareBalance++;
-			return checkBrcaketsBalanse(str, ind + 1, balance);
-		case ']': 
+			break;
+		case ']':
 			balance.squareBalance--;
-			return checkBrcaketsBalanse(str, ind + 1, balance);
-		case '{': 
+			break;
+		case '{':
 			balance.bracesBalance++;
-			return checkBrcaketsBalanse(str, ind + 1, balance);
-		case '}': 
+			break;
+		case '}':
 			balance.bracesBalance--;
-			return checkBrcaketsBalanse(str, ind + 1, balance);
+			break;
 		}
+		return checkBrcaketsBalance(str, balance, ind + 1);
+	}
 	return (balance);
 }
